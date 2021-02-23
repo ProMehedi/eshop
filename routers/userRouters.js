@@ -68,4 +68,25 @@ userRouters.post(
   })
 )
 
+// @desc    Login A User
+// @route   POST /api/v1/users/login
+// @access  Private
+userRouters.post(
+  '/login',
+  asyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email })
+
+    if (user) {
+      if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+        res.status(201).send('Authenticated!')
+      } else {
+        res.status(400).send('Email or Password Wrong!')
+      }
+    } else {
+      res.status(404)
+      throw new Error('User not Found!')
+    }
+  })
+)
+
 export default userRouters
