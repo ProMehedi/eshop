@@ -1,5 +1,6 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
+import bcrypt from 'bcryptjs'
 import { User } from '../models/userModel.js'
 
 const userRouters = express.Router()
@@ -47,7 +48,7 @@ userRouters.post(
     const user = new User({
       name: req.body.name,
       email: req.body.email,
-      passwordHash: req.body.passwordHash,
+      passwordHash: bcrypt.hashSync(req.body.password, 10),
       phone: req.body.phone,
       isAdmin: req.body.isAdmin,
       street: req.body.street,
