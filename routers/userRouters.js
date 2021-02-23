@@ -11,7 +11,7 @@ const userRouters = express.Router()
 userRouters.get(
   '/',
   asyncHandler(async (req, res) => {
-    const userList = await User.find()
+    const userList = await User.find().select('-passwordHash')
 
     if (userList) {
       res.status(201).json(userList)
@@ -28,7 +28,7 @@ userRouters.get(
 userRouters.get(
   '/:id',
   asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.id).select('-passwordHash')
 
     if (user) {
       res.status(201).json(user)
