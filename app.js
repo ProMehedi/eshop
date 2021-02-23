@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import bodyParser from 'body-parser'
+import morgan from 'morgan'
 
 const app = express()
 
@@ -9,6 +10,7 @@ dotenv.config()
 
 // Middleware
 app.use(bodyParser.json())
+app.use(morgan('tiny'))
 
 // Define Variables
 const api = process.env.API_URL
