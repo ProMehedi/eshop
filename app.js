@@ -2,6 +2,8 @@ import dotenv from 'dotenv'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
+import mongoose from 'mongoose'
+import colors from 'colors'
 
 const app = express()
 
@@ -33,7 +35,24 @@ app.post(`${api}/products`, (req, res) => {
   res.send(newProduct)
 })
 
+// Connect with MongoDB
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    })
+    console.log(`MongoDB Connected to ${conn.connection.host}`.cyan.underline)
+  } catch (error) {
+    console.log(error.red.underline.bold)
+  }
+}
+connectDB()
+
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`)
+  console.log(
+    `Server is running at http://localhost:${port}`.green.underline.bold
+  )
 })
