@@ -9,6 +9,7 @@ import productRouters from './routers/productRouters.js'
 import categoryRouters from './routers/categoriRouters.js'
 import userRouters from './routers/userRouters.js'
 import orderRouters from './routers/orderRouters.js'
+import * as ErroMiddleware from './middleware/errorMiddleware.js'
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use(cors())
 app.options('*', cors())
 
 // Middleware
+
 app.use(bodyParser.json())
 app.use(morgan('tiny'))
 
@@ -35,6 +37,10 @@ app.use(`${api}/orders`, orderRouters)
 
 // Connect with MongoDB
 connectDB()
+
+// Custom Error Handling
+app.use(ErroMiddleware.notFound)
+app.use(ErroMiddleware.errorHandler)
 
 // Start the server
 app.listen(port, () => {
