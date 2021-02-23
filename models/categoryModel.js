@@ -1,12 +1,10 @@
 import mongoose from 'mongoose'
 
 const categorySchema = mongoose.Schema({
-  name: String,
-  image: String,
-  countInStock: {
-    type: Number,
-    default: 0,
-  },
+  name: { type: String, required: true },
+  icon: { type: String },
+  color: { type: String },
+  image: { type: String },
 })
 
 export const Category = mongoose.model('Category', categorySchema)
