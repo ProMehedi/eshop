@@ -135,4 +135,23 @@ productRouters.delete(
   })
 )
 
+// @desc    Fetch Total Products Count
+// @route   GET /api/v1/get/count
+// @access  Public
+productRouters.get(
+  '/get/count',
+  asyncHandler(async (req, res) => {
+    const productCount = await Product.countDocuments((count) => count)
+
+    if (productCount) {
+      res.status(201).json({
+        productCount,
+      })
+    } else {
+      res.status(404)
+      throw new Error('No Product Found!')
+    }
+  })
+)
+
 export default productRouters
