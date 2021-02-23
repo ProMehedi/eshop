@@ -14,4 +14,39 @@ categoryRouters.get('/', async (req, res) => {
   }
 })
 
+// Add New Category
+categoryRouters.post('/', async (req, res) => {
+  const category = new Category({
+    name: req.body.name,
+    icon: req.body.icon,
+    color: req.body.color,
+  })
+  const updatedCategroy = await category.save()
+
+  if (!updatedCategroy) {
+    return res
+      .status(404)
+      .send({ success: false, message: "This category can't be created!" })
+  } else {
+    res.status(201).json(updatedCategroy)
+  }
+})
+
+// Delete a Category
+categoryRouters.delete('/:id', async (req, res) => {
+  const category = await Category.findByIdAndRemove(req.params.id)
+
+  try {
+    if (!category) {
+      return res
+        .status(404)
+        .send({ success: false, message: 'Category Not Found!' })
+    } else {
+      res.status(201).json({ success: true, message: 'Category Removed!' })
+    }
+  } catch (err) {
+    return res.status(400).send({ success: false, error: err })
+  }
+})
+
 export default categoryRouters

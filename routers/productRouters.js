@@ -7,10 +7,12 @@ const productRouters = express.Router()
 productRouters.get('/', async (req, res) => {
   const productList = await Product.find()
 
-  if (!productList) {
-    res.status(500).json({ success: false, message: 'No Product Found!' })
+  const updatedProductList = await productList.save()
+
+  if (!updatedProductList) {
+    return res.status(404).send("This Product can't be created!")
   } else {
-    res.status(201).json(productList)
+    res.status(201).json(updatedProductList)
   }
 })
 
