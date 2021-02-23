@@ -8,16 +8,29 @@ const productRouters = express.Router()
 productRouters.get('/', async (req, res) => {
   const productList = await Product.find()
 
-  const updatedProductList = await productList.save()
-
-  if (!updatedProductList) {
-    return res.status(404).send("This Product can't be created!")
+  if (!productList) {
+    return res
+      .status(404)
+      .send({ success: false, message: 'No Product Found!' })
   } else {
-    res.status(201).json(updatedProductList)
+    res.status(201).json(productList)
   }
 })
 
-// App New Product
+// Get A Product
+productRouters.get('/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id)
+
+  if (!product) {
+    return res
+      .status(404)
+      .send({ success: false, message: 'No Product Found!' })
+  } else {
+    res.status(201).json(product)
+  }
+})
+
+// Add New Product
 productRouters.post('/', async (req, res) => {
   const category = await Category.findById(req.body.category)
   if (!category) return res.status(400).send('Invalid Cateogry')
