@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import express from 'express'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import { connectDB } from './config/db.js'
@@ -13,6 +14,10 @@ const app = express()
 
 // Execute dotenv
 dotenv.config()
+
+// Enable Cors
+app.use(cors())
+app.options('*', cors())
 
 // Middleware
 app.use(bodyParser.json())
