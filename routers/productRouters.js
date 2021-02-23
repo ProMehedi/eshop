@@ -22,7 +22,7 @@ productRouters.get('/:id', async (req, res) => {
   const product = await Product.findById(req.params.id).populate('category')
 
   if (product) {
-    res.json(product)
+    res.status(201).json(product)
   } else {
     res.status(404).send({ success: false, message: 'Product Not Found!' })
   }
@@ -30,6 +30,7 @@ productRouters.get('/:id', async (req, res) => {
 
 // Add New Product
 productRouters.post('/', async (req, res) => {
+  // Validate The Cateogy
   const category = await Category.findById(req.body.category)
   if (!category) {
     res.status(400).send('Invalid Cateogry')
@@ -57,6 +58,42 @@ productRouters.post('/', async (req, res) => {
     res.status(400).send("This product can't be created!")
   } else {
     res.status(201).send(updatedProduct)
+  }
+})
+
+// Update A Product
+productRouters.put('/:id', async (req, res) => {
+  // Validate The Cateogy
+  const category = await Category.findById(req.body.category)
+  if (!category) {
+    res.status(400).send('Invalid Cateogry')
+  }
+
+  const product = await Product.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      description: req.body.description,
+      richDescription: req.body.richDescription,
+      image: req.body.image,
+      images: req.body.images,
+      brand: req.body.brand,
+      price: req.body.price,
+      category: req.body.category,
+      countInStock: req.body.countInStock,
+      rating: req.body.rating,
+      numReviews: req.body.numReviews,
+      isFeatured: req.body.isFeatured,
+    },
+    { new: true }
+  )
+
+  if (product) {
+    res.status(201).json(product)
+  } else {
+    res
+      .status(500)
+      .json({ success: false, message: "The Product can't be update!" })
   }
 })
 
