@@ -19,12 +19,10 @@ categoryRouters.get('/:id', async (req, res) => {
   const category = await Category.findById(req.params.id)
 
   if (!category) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'The Category with the given id was not Found!',
-      })
+    res.status(500).json({
+      success: false,
+      message: 'The Category with the given id was not Found!',
+    })
   } else {
     res.status(201).json(category)
   }
@@ -45,6 +43,27 @@ categoryRouters.post('/', async (req, res) => {
       .send({ success: false, message: "This category can't be created!" })
   } else {
     res.status(201).json(updatedCategroy)
+  }
+})
+
+// Update A Category
+categoryRouters.put('/:id', async (req, res) => {
+  const category = await Category.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      icon: req.body.icon,
+      color: req.body.color,
+    },
+    { new: true }
+  )
+
+  if (!category) {
+    res
+      .status(500)
+      .json({ success: false, message: "This category can't be update!" })
+  } else {
+    res.status(201).json(category)
   }
 })
 
