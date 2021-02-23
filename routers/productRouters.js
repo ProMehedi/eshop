@@ -11,7 +11,12 @@ const productRouters = express.Router()
 productRouters.get(
   '/',
   asyncHandler(async (req, res) => {
-    const productList = await Product.find().populate('category')
+    // Filter By Categories /api/v1/products?categories=ID1,ID2
+    let filter = {}
+    if (req.query.categories) {
+      filter = { category: req.query.categories.split(',') }
+    }
+    const productList = await Product.find(filter).populate('category')
 
     if (productList) {
       res.status(201).json(productList)
