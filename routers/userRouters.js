@@ -1,6 +1,7 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import { User } from '../models/userModel.js'
 
 const userRouters = express.Router()
@@ -78,7 +79,10 @@ userRouters.post(
 
     if (user) {
       if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-        res.status(201).send('Authenticated!')
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+          expiresIn: '1d',
+        })
+        res.status(201).send({ user: user.email, token })
       } else {
         res.status(400).send('Email or Password Wrong!')
       }
