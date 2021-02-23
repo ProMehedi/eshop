@@ -14,6 +14,22 @@ categoryRouters.get('/', async (req, res) => {
   }
 })
 
+// Get A Category
+categoryRouters.get('/:id', async (req, res) => {
+  const category = await Category.findById(req.params.id)
+
+  if (!category) {
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: 'The Category with the given id was not Found!',
+      })
+  } else {
+    res.status(201).json(category)
+  }
+})
+
 // Add New Category
 categoryRouters.post('/', async (req, res) => {
   const category = new Category({
