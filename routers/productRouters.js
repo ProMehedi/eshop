@@ -154,4 +154,24 @@ productRouters.get(
   })
 )
 
+// @desc    Fetch All Feature Products
+// @route   GET /api/v1/get/featured/:count
+// @access  Public
+productRouters.get(
+  '/get/featured/:count',
+  asyncHandler(async (req, res) => {
+    const count = req.params.count ? req.params.count : 5
+    const products = await Product.find({ isFeatured: true }).limit(
+      Number(count)
+    )
+
+    if (products) {
+      res.status(201).json(products)
+    } else {
+      res.status(404)
+      throw new Error('No Feature Product Found!')
+    }
+  })
+)
+
 export default productRouters
