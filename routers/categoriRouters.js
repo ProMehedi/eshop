@@ -71,16 +71,12 @@ categoryRouters.put('/:id', async (req, res) => {
 categoryRouters.delete('/:id', async (req, res) => {
   const category = await Category.findByIdAndRemove(req.params.id)
 
-  try {
-    if (!category) {
-      return res
-        .status(404)
-        .send({ success: false, message: 'Category Not Found!' })
-    } else {
-      res.status(201).json({ success: true, message: 'Category Removed!' })
-    }
-  } catch (err) {
-    return res.status(400).send({ success: false, error: err })
+  if (category) {
+    res.status(201).json({ success: true, message: 'Category Deleted!' })
+  } else {
+    res
+      .status(500)
+      .json({ success: false, message: "The Category can't be Delete!" })
   }
 })
 

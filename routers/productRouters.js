@@ -97,4 +97,17 @@ productRouters.put('/:id', async (req, res) => {
   }
 })
 
+// Delete A Product
+productRouters.delete('/:id', async (req, res) => {
+  const product = await Product.findByIdAndRemove(req.params.id)
+
+  if (product) {
+    res.status(201).json({ success: true, message: 'Product Deleted!' })
+  } else {
+    res
+      .status(500)
+      .json({ success: false, message: "The Product can't be Delete!" })
+  }
+})
+
 export default productRouters
